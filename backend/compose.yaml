@@ -1,0 +1,58 @@
+
+name: smart-iot
+
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: smart-iot-db
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: smart_iot
+      POSTGRES_USER: smartiot
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD}
+
+    volumes:
+      - iot_postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+    
+  dashboard:
+    build:
+      context: ../dashboard
+    container_name: smart-iot-dashboard
+    ports:
+      - "127.0.0.1:8080:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+
+  api:
+    build: .
+    container_name: smart-iot-api
+
+    ports:
+      - "127.0.0.1:8001:8000"
+
+    environment:
+      MQTT_HOST: host.docker.internal
+      MQTT_PORT: "1883"
+      DB_HOST: db
+      DB_NAME: smart_iot
+      DB_USER: smartiot
+      DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD}
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+    restart: unless-stopped
+
+volumes:
+  iot_postgres_data:

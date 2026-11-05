@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#080d1c" />
+  <meta name="description" content="Live monitoring dashboard for the ESP32-S3 Smart IoT Environmental Monitoring System." />
+  <title>Smart IoT | Environment Control Room</title>
+  <link rel="stylesheet" href="/styles-v4.css" />
+  <script src="/app-v4.js" defer></script>
+  <!-- v4: fresh versioned assets avoid browser cache mismatch -->
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#overview" aria-label="Smart IoT home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 28 28" width="28" height="28" fill="none"><path d="M4 17c5-1 5-9 10-9s5 11 10 3" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="21" cy="21" r="3" fill="currentColor"/></svg>
+        </span>
+        <span><b>Smart IoT</b><small>TELEMETRY STUDIO</small></span>
+      </a>
+      <div class="nav-caption">CONTROL ROOM</div>
+      <nav class="navigation" aria-label="Main navigation">
+        <button class="nav-item selected" data-view="overview" aria-current="page"><span class="nav-symbol">◫</span> Overview</button>
+        <button class="nav-item" data-view="history"><span class="nav-symbol">▥</span> Reading history</button>
+        <button class="nav-item" data-view="system"><span class="nav-symbol">◉</span> System status</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="device-unit"><span class="pulse-dot" id="sidebar-device-dot"></span><div><b>ESP32-S3</b><small id="sidebar-device-status">Checking telemetry…</small></div></div>
+        <div class="sidebar-foot">SMART IOT / CONTROL ROOM<br/>MQTT · FastAPI · PostgreSQL</div>
+      </div>
+    </aside>
+
+    <main class="workspace">
+      <header class="topbar">
+        <div class="crumbs">Workspace <span>/</span> <strong id="breadcrumb">Overview</strong></div>
+        <div class="topbar-right"><span class="mini-clock" id="live-clock"></span><span class="line-sep"></span><span class="top-status"><span class="pulse-dot" id="top-dot"></span><span id="top-status-text">Checking</span></span></div>
+      </header>
+
+      <div class="content">
+        <section id="overview" class="view active" aria-labelledby="overview-title">
+          <div class="page-heading"><div><div class="eyebrow">LIVE ENVIRONMENT INTELLIGENCE</div><h1 id="overview-title">Environment overview<span class="title-period">.</span></h1><p>Four measurements from two sensors. One connected view.</p></div><div class="update-box"><span class="green-pin"></span><span><b id="last-updated">Awaiting first reading</b><small>Last received</small></span></div></div>
+          <section class="hero-panel" aria-label="Live environmental monitoring summary">
+            <div class="hero-noise" aria-hidden="true"></div>
+            <div class="hero-copy">
+              <div class="hero-kicker"><span class="live-led"></span> LIVE TELEMETRY <span class="kicker-split">/</span> NODE 01</div>
+              <h2>Make sense of<br/><span>your surroundings.</span></h2>
+              <p>A living picture of your environment — powered by real sensor data, streaming in every three seconds.</p>
+              <div class="hero-readouts">
+                <div><span class="readout-value"><span id="hero-temperature">--</span><small>°C</small></span><span class="readout-caption">AMBIENT TEMP</span></div>
+                <div class="readout-divider"></div>
+                <div><span class="readout-value"><span id="hero-humidity">--</span><small>%</small></span><span class="readout-caption">REL. HUMIDITY</span></div>
+                <div class="readout-divider"></div>
+                <div><span class="readout-value"><span id="hero-light">--</span><small>lx</small></span><span class="readout-caption">LIGHT LEVEL</span></div>
+              </div>
+            </div>
+            <div class="hero-art" aria-hidden="true">
+              <div class="hero-orbit orbit-1"></div><div class="hero-orbit orbit-2"></div><div class="hero-orbit orbit-3"></div>
+              <div class="orbit-dot orbit-dot-a"></div><div class="orbit-dot orbit-dot-b"></div>
+              <div class="hero-core"><svg viewBox="0 0 100 100" fill="none" width="92" height="92" aria-hidden="true"><path d="M18 50c12-23 22-23 32 0s20 23 32 0" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><path d="M18 50c12-23 22-23 32 0s20 23 32 0" stroke="currentColor" stroke-width="11" stroke-linecap="round" opacity=".12"/><circle cx="50" cy="50" r="36" stroke="currentColor" stroke-width=".7" stroke-dasharray="2 5" opacity=".5"/></svg></div>
+              <span class="hero-orbit-label label-1">I²C ONLINE</span><span class="hero-orbit-label label-2">3s SYNC</span>
+            </div>
+            <div class="hero-bottomline"><span class="hero-progress-line"></span><span>LIVE FEED <b>ACTIVE</b></span></div>
+          </section>
+          <div class="status-banner" id="status-banner" role="status"><div class="banner-icon" id="banner-icon">●</div><div class="banner-copy"><b id="banner-title">Connecting to the API</b><span id="banner-detail">Checking for the latest sensor reading.</span></div><span class="banner-tag" id="banner-tag">CHECKING</span></div>
+          <div class="section-title"><div><h2>Live measurements</h2><p>Current readings from BME280 and BH1750 sensors</p></div><span class="subtle-label">AUTO-REFRESH · 03s</span></div>
+          <div class="metrics-grid">
+            <article class="metric-card"><div class="metric-top"><span class="metric-name">Temperature</span><span class="metric-icon temp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M14 14.8V5a2 2 0 0 0-4 0v9.8a4 4 0 1 0 4 0Z" stroke="currentColor" stroke-width="1.7"/><path d="M12 9v9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span></div><div class="metric-measure"><strong id="temperature">—</strong><span>°C</span></div><div class="metric-foot"><span id="temperature-trend">Waiting for data</span><span class="metric-source">BME280</span></div></article>
+            <article class="metric-card"><div class="metric-top"><span class="metric-name">Humidity</span><span class="metric-icon humid" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2C9 7 5.5 10.6 5.5 15a6.5 6.5 0 0 0 13 0C18.5 10.6 15 7 12 2Z" stroke="currentColor" stroke-width="1.7"/><path d="M9 16.5c.5 1.6 1.5 2.3 3 2.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span></div><div class="metric-measure"><strong id="humidity">—</strong><span>%</span></div><div class="metric-foot"><span id="humidity-trend">Waiting for data</span><span class="metric-source">BME280</span></div></article>
+            <article class="metric-card"><div class="metric-top"><span class="metric-name">Air pressure</span><span class="metric-icon pressure" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="m12 12 4-4M6 16h12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span></div><div class="metric-measure"><strong id="pressure">—</strong><span>hPa</span></div><div class="metric-foot"><span id="pressure-trend">Waiting for data</span><span class="metric-source">BME280</span></div></article>
+            <article class="metric-card"><div class="metric-top"><span class="metric-name">Light intensity</span><span class="metric-icon light" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.7"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span></div><div class="metric-measure"><strong id="light">—</strong><span>lux</span></div><div class="metric-foot"><span id="light-trend">Waiting for data</span><span class="metric-source">BH1750</span></div></article>
+          </div>
+          <div class="section-title chart-header"><div><h2>Sensor trends</h2><p>Measurements from your PostgreSQL history</p></div><div class="segmented" role="group" aria-label="Number of readings to chart"><button data-limit="25">25</button><button data-limit="50" class="active">50</button><button data-limit="100">100</button><button data-limit="200">200</button></div></div>
+          <div class="charts-grid">
+            <article class="chart-card"><div class="chart-heading"><div><div class="chart-title">Temperature</div><div class="chart-subtitle">Degrees Celsius</div></div><div class="chart-current" id="chart-temperature-value">—</div></div><div class="chart-visual" id="chart-temperature" aria-label="Temperature trend chart"></div><div class="chart-range" id="range-temperature">Awaiting history</div></article>
+            <article class="chart-card"><div class="chart-heading"><div><div class="chart-title">Relative humidity</div><div class="chart-subtitle">Percentage</div></div><div class="chart-current" id="chart-humidity-value">—</div></div><div class="chart-visual" id="chart-humidity" aria-label="Humidity trend chart"></div><div class="chart-range" id="range-humidity">Awaiting history</div></article>
+            <article class="chart-card"><div class="chart-heading"><div><div class="chart-title">Atmospheric pressure</div><div class="chart-subtitle">Hectopascals</div></div><div class="chart-current" id="chart-pressure-value">—</div></div><div class="chart-visual" id="chart-pressure" aria-label="Pressure trend chart"></div><div class="chart-range" id="range-pressure">Awaiting history</div></article>
+            <article class="chart-card"><div class="chart-heading"><div><div class="chart-title">Light exposure</div><div class="chart-subtitle">Lux</div></div><div class="chart-current" id="chart-light-value">—</div></div><div class="chart-visual" id="chart-light" aria-label="Light trend chart"></div><div class="chart-range" id="range-light">Awaiting history</div></article>
+          </div>
+        </section>
+
+        <section id="history" class="view" aria-labelledby="history-title">
+          <div class="page-heading"><div><div class="eyebrow">PERSISTENT STORAGE</div><h1 id="history-title">Reading history<span class="title-period">.</span></h1><p>Recent measurements stored in your PostgreSQL database.</p></div><span class="history-count" id="history-count">— records</span></div>
+          <div class="panel"><div class="panel-header"><div><h2>Recent measurements</h2><p>Latest 200 readings · timestamps shown in your browser's local time</p></div><div class="history-actions"><button class="secondary-button" id="export-csv" type="button">↓ Export CSV</button><button class="secondary-button" id="refresh-history" type="button">Refresh now</button></div></div><div class="table-scroll"><table><thead><tr><th>RECEIVED AT</th><th>TEMP (°C)</th><th>HUMIDITY (%)</th><th>PRESSURE (hPa)</th><th>LIGHT (lux)</th><th>STATUS</th></tr></thead><tbody id="readings-body"><tr><td colspan="6" class="empty-cell">Loading measurements…</td></tr></tbody></table></div></div>
+        </section>
+
+        <section id="system" class="view" aria-labelledby="system-title">
+          <div class="page-heading"><div><div class="eyebrow">INFRASTRUCTURE HEALTH</div><h1 id="system-title">System status<span class="title-period">.</span></h1><p>Operational visibility into your local IoT pipeline.</p></div></div>
+          <div class="system-grid">
+            <div class="system-card"><span class="system-label">FastAPI service</span><b id="api-health">Checking…</b><small>Backend response</small></div>
+            <div class="system-card"><span class="system-label">MQTT connection</span><b id="mqtt-health">Checking…</b><small>API subscriber to Mosquitto</small></div>
+            <div class="system-card"><span class="system-label">PostgreSQL</span><b id="db-health">Checking…</b><small>Database query health</small></div>
+            <div class="system-card"><span class="system-label">ESP32-S3 telemetry</span><b id="device-health">Checking…</b><small>Online when latest reading is ≤ 20s old</small></div>
+          </div>
+          <div class="panel system-info"><h2>Deployment information</h2><div class="info-row"><span>Telemetry topic</span><code>smart-iot/esp32s3/telemetry</code></div><div class="info-row"><span>API proxy</span><code>/api/readings/latest</code></div><div class="info-row"><span>History endpoint</span><code>/api/readings/history</code></div><div class="info-row"><span>Refresh interval</span><code>3 seconds</code></div><div class="info-row"><span>Alert thresholds</span><code>&gt;35°C · &gt;80% RH · &lt;50 lux</code></div><p class="system-note">This dashboard reports the status of the API's MQTT connection, not a direct network ping to the ESP32. Fresh telemetry is used to infer the device's online state. Demonstration alert thresholds are configured in the firmware.</p></div>
+        </section>
+      </div>
+      <footer class="footer"><span>SMART IOT · ESP32-S3 ENVIRONMENT MONITOR</span><span>Local deployment / Docker · UI v4</span></footer>
+    </main>
+  </div>
+  <div id="toast" class="toast" role="alert" aria-live="polite"></div>
+</body>
+</html>

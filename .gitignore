@@ -1,0 +1,45 @@
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Environment variables and credentials
+.env
+.env.*
+!.env.example
+secrets.h
+credentials.h
+
+# PlatformIO
+.pio/
+.pioenvs/
+.piolibdeps/
+
+# Node.js
+node_modules/
+dist/
+
+# Local databases and logs
+*.db
+*.sqlite
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Large video recordings
+*.mp4
+
+# Private ESP32 configuration
+secrets.h
+
+# Backend credentials
+.env
+.env.*
+!.env.example
+
+# PlatformIO build files
+.pio/

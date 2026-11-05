@@ -1,0 +1,9 @@
+  dashboard:
+    build:
+      context: ../dashboard
+    container_name: smart-iot-dashboard
+    ports:
+      - "127.0.0.1:8080:80"
+    depends_on:
+      - api
+    restart: unless-stopped
